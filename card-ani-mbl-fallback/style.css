@@ -31,7 +31,8 @@ body {
   transition: transform 500ms ease;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-within {
   transform: scale(1.05);
 }
 
@@ -43,26 +44,6 @@ body {
     hsl(20 0% 0% / 0.3),
     hsl(0 0% 0% / 1)
   );
-
-  transform: translateY(65%);
-  transition: transform 500ms ease;
-  /* XXX: transition-delay: 500ms; doing it this way delays both ways */
-}
-
-.card:hover .card-content {
-  transform: translateY(0);
-  /* XXX: doing it this way delays only the start... lookin' good */
-  transition-delay: 500ms;
-}
-
-.card-content > *:not(.card-title) {
-  opacity: 0;
-  transition: opacity 500ms linear;
-}
-
-.card:hover .card-content > *:not(.card-title) {
-  opacity: 1;
-  transition-delay: 800ms;
 }
 
 .card-title {
@@ -81,19 +62,61 @@ body {
   height: 4px;
   width: calc(100% + var(--padding));
   background-color: var(--clr-accent-400);
-  transform: scaleX(0);
   transform-origin: left;
 
   /* XXX: Best things to transition -- transform and opacity DON'T DO WIDTH */
   transition: transform 500ms ease;
 }
 
-.card:hover .card-title::after {
+.card:hover .card-title::after,
+.card:focus-within .card-title::after {
   transform: scaleX(1);
 }
 
 .card-body {
   color: hsla(0, 100%, 100%, 0.85);
+}
+
+@media (hover) {
+  .card-content {
+    transform: translateY(65%);
+    transition: transform 500ms ease;
+    /* XXX: transition-delay: 500ms; doing it this way delays both ways */
+  }
+
+  .card:hover .card-content,
+  .card:focus-within .card-content {
+    transform: translateY(0);
+    /* XXX: doing it this way delays only the start... lookin' good */
+    transition-delay: 500ms;
+  }
+
+  .card:focus-within .card-content {
+    transition-duration: 0ms;
+  }
+
+  .card:focus-within .card-content > *:not(.card-title) {
+    transition-delay: 0ms;
+  }
+
+  .card-content > *:not(.card-title) {
+    opacity: 0;
+    transition: opacity 500ms linear;
+  }
+
+  .card:hover .card-content > *:not(.card-title) {
+    opacity: 1;
+    transition-delay: 800ms;
+  }
+
+  .card:focus-within .card-content > *:not(.card-title) {
+    opacity: 1;
+    transition-delay: 0ms;
+  }
+
+  .card-title::after {
+    transform: scaleX(0);
+  }
 }
 
 .button {
@@ -110,4 +133,13 @@ body {
 .button:hover,
 .button:focus {
   background-color: var(--clr-neutral-100);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
