@@ -23,10 +23,16 @@ body {
   background-image: url(img/card-bg.jpg);
   background-size: cover;
   padding: 10rem 0 0;
-  min-width: 35ch;
+  max-width: 35ch;
   border-radius: -0.5rem;
   /* XXX: without this the bottom would square because of children */
   overflow: hidden;
+
+  transition: transform 500ms ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }
 
 .card-content {
@@ -37,6 +43,26 @@ body {
     hsl(20 0% 0% / 0.3),
     hsl(0 0% 0% / 1)
   );
+
+  transform: translateY(65%);
+  transition: transform 500ms ease;
+  /* XXX: transition-delay: 500ms; doing it this way delays both ways */
+}
+
+.card:hover .card-content {
+  transform: translateY(0);
+  /* XXX: doing it this way delays only the start... lookin' good */
+  transition-delay: 500ms;
+}
+
+.card-content > *:not(.card-title) {
+  opacity: 0;
+  transition: opacity 500ms linear;
+}
+
+.card:hover .card-content > *:not(.card-title) {
+  opacity: 1;
+  transition-delay: 800ms;
 }
 
 .card-title {
@@ -45,7 +71,6 @@ body {
   width: max-content;
   /* XXX: this fixes things with overflow */
   max-width: 100%;
-  outline: 1px solid red;
 }
 
 .card-title::after {
@@ -56,10 +81,19 @@ body {
   height: 4px;
   width: calc(100% + var(--padding));
   background-color: var(--clr-accent-400);
+  transform: scaleX(0);
+  transform-origin: left;
+
+  /* XXX: Best things to transition -- transform and opacity DON'T DO WIDTH */
+  transition: transform 500ms ease;
+}
+
+.card:hover .card-title::after {
+  transform: scaleX(1);
 }
 
 .card-body {
-  color: hsla(0, 100%, 100%, 0.8);
+  color: hsla(0, 100%, 100%, 0.85);
 }
 
 .button {
